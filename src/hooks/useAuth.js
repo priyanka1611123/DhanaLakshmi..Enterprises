@@ -1,14 +1,33 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthChange } from '../supabase/services';
+import { supabase } from '../supabaseClient';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(undefined);
+
   useEffect(() => {
-    const unsub = onAuthChange(u => setUser(u));
-    return unsub;
+
+    // ✅ 1. Get existing session (VERY IMPORTANT)
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data?.session?.user ?? null);
+    };
+
+    getSession();
+
+    // ✅ 2. Listen for auth changes
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, []);
+
   return (
     <AuthContext.Provider value={{ user, loading: user === undefined }}>
       {children}

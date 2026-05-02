@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthChange } from '../supabase/services';
+import { supabase } from '../supabase/config'; // ✅ FIXED
 
 const AuthContext = createContext(null);
 
@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
 
-    // ✅ 1. Get existing session (VERY IMPORTANT)
+    // ✅ 1. Get existing session
     const getSession = async () => {
       const { data } = await supabase.auth.getSession();
       setUser(data?.session?.user ?? null);

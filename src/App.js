@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './hooks/useAuth';
-import { supabase } from './supabaseClient';
 
 import { subscribeInvoices, subscribeCustomers, getSettings, dbSettingsToForm } from './supabase/services';
 
@@ -22,33 +21,6 @@ function AppInner() {
   const [invoices, setInvoices] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [business, setBusiness] = useState(null);
-
-  // ✅ FIX: Handle Supabase redirect session
-  useEffect(() => {
-    const handleAuth = async () => {
-      const { data } = await supabase.auth.getSession();
-
-      if (data?.session) {
-        console.log("Session restored");
-      }
-    };
-
-    handleAuth();
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log("Auth event:", event);
-
-        if (event === "SIGNED_IN" && session) {
-          window.location.href = "/";
-        }
-      }
-    );
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
 
   // 🔄 Load data when user exists
   useEffect(() => {

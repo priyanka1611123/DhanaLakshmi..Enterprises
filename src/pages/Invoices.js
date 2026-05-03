@@ -120,7 +120,7 @@ export default function Invoices({ invoices, customers, business }) {
                   <td style={td}>
                     <div style={{ display:'flex', gap:5 }}>
                       <button style={btn()} title="View" onClick={()=>setViewInv(inv)}><Eye size={13}/></button>
-                      <button style={btn()} title="PDF" onClick={()=>generatePDF(inv,business)}><Download size={13}/></button>
+                      <button style={btn()} title="PDF" onClick={()=>generatePDF(inv, business || {})}><Download size={13}/></button>
                       <button style={btn({ color:'#25d366', borderColor:'rgba(37,211,102,.3)', background:'rgba(37,211,102,.06)' })} title="WhatsApp" onClick={()=>handleWhatsApp(inv)}><MessageCircle size={13}/></button>
                       <button style={btn()} title="Email" onClick={()=>handleEmail(inv)}><Mail size={13}/></button>
                       <button style={btn({ color:'#ef4444', borderColor:'rgba(239,68,68,.3)', background:'rgba(239,68,68,.06)' })} title="Delete" onClick={()=>handleDelete(inv.id)}><Trash2 size={13}/></button>

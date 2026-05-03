@@ -3,9 +3,10 @@ import autoTable from 'jspdf-autotable';
 import { calcItem, calcInvoice, fmtINR, numToWords } from './helpers';
 
 export const generatePDF = (inv, business) => {
+  export const generatePDF = (inv, businessParam) => {
   try {
-    // ✅ FORCE FIX (this is key)
-    business = business || {};
+    // ✅ SAFE FIX (no null crash)
+    const business = businessParam ?? {};
 
     if (!inv || !inv.items) {
       console.error("Invalid invoice data", inv);

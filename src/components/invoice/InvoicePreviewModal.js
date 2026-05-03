@@ -13,7 +13,7 @@ export default function InvoicePreviewModal({ inv, business, onClose, onWhatsApp
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div style={{ fontWeight: 700, fontSize: 15 }}>Invoice Preview</div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-green btn-sm" onClick={() => generatePDF(inv, business)}><Download size={13} /> PDF</button>
+            <button className="btn btn-green btn-sm" onClick={() => generatePDF(inv, business || {})}><Download size={13} /> PDF</button>
             <button className="btn btn-blue btn-sm" onClick={onEmail}><Mail size={13} /> Email</button>
             <button className="btn btn-sm" style={{ background: 'rgba(37,211,102,.12)', color: '#25d366', border: '1px solid rgba(37,211,102,.3)' }} onClick={onWhatsApp}><MessageCircle size={13} /> WhatsApp</button>
             <button className="btn btn-ghost btn-sm" onClick={onClose}><X size={13} /></button>

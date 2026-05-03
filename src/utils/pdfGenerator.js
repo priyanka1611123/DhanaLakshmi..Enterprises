@@ -2,21 +2,15 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { calcItem, calcInvoice, fmtINR, numToWords } from './helpers';
 
-export const generatePDF = (inv, business) => {
-  export const generatePDF = (inv, businessParam) => {
+export const generatePDF = (inv, businessParam) => {
   try {
-    // ✅ SAFE FIX (no null crash)
+    // ✅ Safe fallback
     const business = businessParam ?? {};
 
     if (!inv || !inv.items) {
       console.error("Invalid invoice data", inv);
       alert("Invoice data missing");
       return;
-    }
-
-    if (!business) {
-      console.warn("Business is null, using defaults");
-      business = {};
     }
 
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -45,7 +39,7 @@ export const generatePDF = (inv, business) => {
       `Phone: ${business?.phone || ''} | Email: ${business?.email || ''}`
     ], M, 29);
 
-    // ── Invoice title ──────────────────────
+    // ── Invoice Title ──────────────────────
     doc.setFontSize(26);
     doc.setTextColor(245, 158, 11);
     doc.text('INVOICE', W - M, 18, { align: 'right' });
@@ -55,7 +49,7 @@ export const generatePDF = (inv, business) => {
     doc.text(`#${inv.invNo || '-'}`, W - M, 26, { align: 'right' });
     doc.text(`Date: ${inv.date || '-'}   Due: ${inv.due || '-'}`, W - M, 32, { align: 'right' });
 
-    // ── Status badge ───────────────────────
+    // ── Status Badge ───────────────────────
     const statusColors = {
       paid: [16, 185, 129],
       pending: [245, 158, 11],

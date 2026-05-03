@@ -4,14 +4,20 @@ import { calcItem, calcInvoice, fmtINR, numToWords } from './helpers';
 
 export const generatePDF = (inv, business = {}) => {
   try {
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const W = 210, M = 14;
-
+    // ✅ Safety checks
     if (!inv || !inv.items) {
       console.error("Invalid invoice data", inv);
       alert("Invoice data missing");
       return;
     }
+
+    if (!business) {
+      console.warn("Business is null, using defaults");
+      business = {};
+    }
+
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const W = 210, M = 14;
 
     const { subtotal, gstTotal, total } = calcInvoice(inv.items);
 
@@ -22,28 +28,29 @@ export const generatePDF = (inv, business = {}) => {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(22);
     doc.setTextColor(245, 158, 11);
-    doc.text(business.name || 'DL ENTERPRISES', M, 16);
+    doc.text(business?.name || 'DL ENTERPRISES', M, 16);
 
     doc.setFontSize(8);
     doc.setTextColor(140, 146, 164);
-    doc.text(business.tagline || 'Quality · Trust · Excellence', M, 22);
+    doc.text(business?.tagline || 'Quality · Trust · Excellence', M, 22);
 
     doc.setFontSize(8);
     doc.setTextColor(200, 200, 200);
     doc.text([
-      business.address || '',
-      `GSTIN: ${business.gstin || '-'}`,
-      `Phone: ${business.phone || ''} | Email: ${business.email || ''}`
+      business?.address || '',
+      `GSTIN: ${business?.gstin || '-'}`,
+      `Phone: ${business?.phone || ''} | Email: ${business?.email || ''}`
     ], M, 29);
 
+    // ── Invoice title ──────────────────────
     doc.setFontSize(26);
     doc.setTextColor(245, 158, 11);
     doc.text('INVOICE', W - M, 18, { align: 'right' });
 
     doc.setFontSize(9);
     doc.setTextColor(200, 200, 200);
-    doc.text(`#${inv.invNo}`, W - M, 26, { align: 'right' });
-    doc.text(`Date: ${inv.date}   Due: ${inv.due}`, W - M, 32, { align: 'right' });
+    doc.text(`#${inv.invNo || '-'}`, W - M, 26, { align: 'right' });
+    doc.text(`Date: ${inv.date || '-'}   Due: ${inv.due || '-'}`, W - M, 32, { align: 'right' });
 
     // ── Status badge ───────────────────────
     const statusColors = {
@@ -86,10 +93,10 @@ export const generatePDF = (inv, business = {}) => {
       const r = calcItem(it);
       return [
         i + 1,
-        it.desc,
-        `${it.qty}`,
-        fmtINR(it.price),
-        `${it.gst}%`,
+        it.desc || '',
+        `${it.qty || 0}`,
+        fmtINR(it.price || 0),
+        `${it.gst || 0}%`,
         fmtINR(r.gstAmt),
         fmtINR(r.total)
       ];
@@ -105,9 +112,7 @@ export const generatePDF = (inv, business = {}) => {
         textColor: [245, 158, 11],
         fontSize: 8
       },
-      bodyStyles: {
-        fontSize: 8
-      },
+      bodyStyles: { fontSize: 8 },
       margin: { left: M, right: M }
     });
 
@@ -147,7 +152,7 @@ export const generatePDF = (inv, business = {}) => {
     );
 
     // ── Save ───────────────────────────────
-    doc.save(`${inv.invNo || 'invoice'}.pdf`);
+    doc.save(`${(inv.invNo || 'invoice').replace(/\//g, '-')}.pdf`);
 
   } catch (err) {
     console.error("PDF ERROR:", err);

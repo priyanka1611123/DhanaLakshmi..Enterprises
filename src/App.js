@@ -54,7 +54,13 @@ function AppInner() {
       <div className="app-layout">
         <Sidebar user={user} business={business}/>
         {/* main-content class is styled in public/index.html */}
-          <main className="main">
+          <main
+  className="main"
+  style={{
+    position: 'relative',
+    zIndex: 1
+  }}
+>
           <Routes>
             <Route path="/"            element={<Dashboard     invoices={invoices} customers={customers}/>}/>
             <Route path="/invoices"    element={<Invoices       invoices={invoices} customers={customers} business={business}/>}/>

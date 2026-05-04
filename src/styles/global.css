@@ -109,8 +109,8 @@ html, body, #root {
   margin-left: var(--sidebar-w);
   padding: 28px 30px;
   min-height: 100vh;
+  width: calc(100% - var(--sidebar-w));  /* ✅ ADD THIS */
   background: var(--bg);
-  flex: 1;
 }
 /* ── PAGE HEADER ── */
 .page-header { margin-bottom: 26px; }

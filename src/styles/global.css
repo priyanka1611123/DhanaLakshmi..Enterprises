@@ -112,7 +112,6 @@ html, body, #root {
   background: var(--bg);
   flex: 1;
 }
-
 /* ── PAGE HEADER ── */
 .page-header { margin-bottom: 26px; }
 .page-title { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -.3px; }

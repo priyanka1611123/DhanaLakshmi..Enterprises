@@ -121,7 +121,15 @@ export default function Sidebar({ user, business }) {
   return (
     <>
       {/* ══ DESKTOP SIDEBAR ══ */}
-      <aside className="desktop-sidebar">
+      <aside
+  className="desktop-sidebar"
+  style={{
+    height: '100vh',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column'
+  }}
+>
         <Logo showClose={false}/>
         <nav style={{ flex:1, overflowY:'auto', padding:'8px 0' }}>
           <NavList/>

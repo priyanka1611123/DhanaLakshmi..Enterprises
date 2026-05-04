@@ -68,6 +68,9 @@ const CATEGORIES = ['General','Helmet Sales','Accessories','Service','Online Ord
 // ── Main Component ────────────────────────────────────────────
 export default function DailySales() {
   const { user }          = useAuth();
+  useEffect(() => {
+  console.log("LOGGED USER:", user);
+}, [user]);
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving,  setSaving]  = useState(false);
